@@ -1,0 +1,15 @@
+{
+    "files_on_mark" : [
+        {
+            "state" : "mark",
+            "dir" : "/Users/xern/project/DiskCleaner/test/a",
+            "search_type" : "create",
+            "time_res" : "1000",
+            "size" : "100",
+            "search_date" : "2019-1-1"
+        },
+        {
+
+        }
+    ]
+}
