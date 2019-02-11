@@ -1,53 +1,47 @@
 {
-    "last_modified_date":"2019-02-11 21:14:14",
-    "files_on_mark":[
-        {
+    "last_modified_date":"2019-02-11 21:37:10",
+    "files_on_mark":{
+        "/Users/xern/project/DiskCleaner/test/a":{
             "state":"mark",
-            "dir":"/Users/xern/project/DiskCleaner/test/a",
             "search_type":"create_time",
             "time_res":"1000",
             "size":"100",
             "search_date":"2019-1-1"
         },
-        {
+        "/Users/xern/project/DiskCleaner/test/c":{
             "state":"mark",
-            "dir":"/Users/xern/project/DiskCleaner/test/c",
             "search_type":"create_time",
             "time_res":"1000",
             "size":"100",
             "search_date":"2019-1-1"
         },
-        {
+        "/Users/xern/project/DiskCleaner/test/d":{
             "state":"mark",
-            "dir":"/Users/xern/project/DiskCleaner/test/d",
             "search_type":"create_time",
             "time_res":"1000",
             "size":"100",
             "search_date":"2019-1-1"
         },
-        {
+        "/Users/xern/project/DiskCleaner/test/b":{
             "state":"mark",
-            "dir":"/Users/xern/project/DiskCleaner/test/b",
             "search_type":"create_time",
             "time_res":"1000",
             "size":"100",
             "search_date":"2019-1-1"
         },
-        {
+        "/Users/xern/project/DiskCleaner/test/e/a":{
             "state":"mark",
-            "dir":"/Users/xern/project/DiskCleaner/test/e/a",
             "search_type":"create_time",
             "time_res":"1000",
             "size":"100",
             "search_date":"2019-1-1"
         },
-        {
+        "/Users/xern/project/DiskCleaner/test/e/b":{
             "state":"mark",
-            "dir":"/Users/xern/project/DiskCleaner/test/e/b",
             "search_type":"create_time",
             "time_res":"1000",
             "size":"100",
             "search_date":"2019-1-1"
         }
-    ]
+    }
 }

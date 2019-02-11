@@ -64,7 +64,7 @@ def main():
             parsed_record_file = json.load(recordfile)
         parsed_record_file["last_modified_date"]=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     else:
-        parsed_record_file = {"last_modified_date" : time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "files_on_mark" : []}
+        parsed_record_file = {"last_modified_date" : time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "files_on_mark" : {}}
     
     for path, dirs, files in os.walk(set_direction):
         for name in files:
@@ -73,8 +73,8 @@ def main():
                 mtime = os.path.getmtime(fullpath)
                 # if (now - mtime) > set_time:
                 #     print(fullpath)
-                print(fullpath)
-                parsed_record_file["files_on_mark"].append({"state" : "mark", "dir" : fullpath, "search_type" : search_type, "time_res" : "1000", "size" : "100", "search_date" : "2019-1-1"})
+                print(fullpath)                
+                parsed_record_file["files_on_mark"][fullpath] = {"state" : "mark", "search_type" : search_type, "time_res" : "1000", "size" : "100", "search_date" : "2019-1-1"}
 
     with open(record_file,"w") as dump_f:
         json.dump(parsed_record_file, dump_f, indent=4, separators=(',', ':'))
