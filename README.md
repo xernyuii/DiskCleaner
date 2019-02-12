@@ -35,7 +35,7 @@ conf.json
 ```
 + "set_direction"   # Direction to start action
     + "set_direction" : "/Users/public" # Do actions in "/Users/public"
-    + "set_direction" : "C:\\Users\\public" # Do actions in "C:\Users\public"
+    + "set_direction" : "C:\\\Users\\\public" # Do actions in "C:\Users\public"
 + "search_type" # Searching type, choose one of "create time", "last modified time", "last accessed time"
     + "search_type" : "create_time" # create time
     + "search_type" : "modify_time" # last modified time
