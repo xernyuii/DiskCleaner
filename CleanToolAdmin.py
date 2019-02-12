@@ -17,7 +17,7 @@ def args_check(config_file, mode, parsed_config):
     elif isinstance(parsed_config["check_num"], int) == False:
         print("ERROR: Config file not correct! (parsed)")
         sys.exit(2)
-    elif mode not in {"normal", "protect", "force", "record", "clean", "clear_all"}:
+    elif mode not in {"normal", "protect", "force", "record", "clean", "clear_all", "clear_all_unmark"}:
         print("ERROR: Mode not correct.")
         sys.exit(2)
 
@@ -60,16 +60,37 @@ def rcs_search(parsed_config, parsed_record_file):
         for name in files:
             fullpath = os.path.join(path, name)
             if os.path.exists(fullpath):
-                mtime = os.path.getmtime(fullpath)
-                fsize = os.path.getsize(fullpath) / (1024)
-                # if (now - mtime) > set_time:
-                #     print(fullpath)
-                # print(fullpath)
-                if fullpath in parsed_record_file["files_on_mark"].keys():
-                    flag = "mark again"
-                else:
-                    flag = "mark"
-                parsed_record_file["files_on_mark"][fullpath] = {"state" : flag, "search_type" : search_type, "time_res" : set_time, "size" : str(fsize) + " KB", "search_date" : local_time}
+
+                if search_type == "create_time":
+                    ftime = os.path.getctime(fullpath)
+                elif search_type == "modify_time":
+                    ftime = os.path.getmtime(fullpath)
+                elif search_type == "access_time":
+                    ftime = os.path.getmtime(fullpath)
+                
+                
+                if (now - ftime) >= set_time:
+                    fsize = os.path.getsize(fullpath)
+                    
+                    if fsize < 1024:
+                        fsize = fsize
+                        unit = "B"
+                    elif fsize < (1024 * 1024):
+                        fsize = fsize / (1024)
+                        unit = "KB"
+                    elif fsize < (1024 * 1024 * 1024):
+                        fsize = fsize / (1024 * 1024)
+                        unit = "MB"
+                    else:
+                        fsize = fsize / (1024 * 1024 * 1024)
+                        unit = "GB"
+
+                    ftime_local = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ftime))
+                    if fullpath in parsed_record_file["files_on_mark"].keys():
+                        flag = "mark again"
+                    else:
+                        flag = "mark"
+                    parsed_record_file["files_on_mark"][fullpath] = {"state" : flag, "search_type" : search_type, "ftime" : ftime, "ftime_local" : ftime_local, "time_set" : set_time, "size" : str(fsize) + " " + unit, "search_date" : local_time}
     
 
 def do_record(record_file, parsed_record_file):
@@ -80,6 +101,7 @@ def do_delete_from_parsed_record_file(parsed_record_file):
     for fullpath in parsed_record_file["files_on_mark"]:
         if os.path.exists(fullpath) == True :
             try:
+                os.remove(fullpath)
                 print("delete", fullpath)
             except OSError as err:
                 print("OSError: {0}".format(err))
@@ -111,6 +133,15 @@ def update_state_from_parsed_record_file(parsed_record_file):
 def clear_all_record(parsed_record_file):
     parsed_record_file["files_on_mark"].clear()
 
+def clear_all_record_unmark(parsed_record_file):
+    ready_clear_record = []
+    for fullpath in parsed_record_file["files_on_mark"]:
+        if parsed_record_file["files_on_mark"][fullpath]["state"] in {"not exist", "cleaned"}:
+            ready_clear_record.append(fullpath)
+    
+    for fullpath in ready_clear_record:
+        parsed_record_file["files_on_mark"].pop(fullpath)
+
 def mode_action(mode, parsed_config):
 
     record_file = parsed_config["record_file"]
@@ -136,6 +167,10 @@ def mode_action(mode, parsed_config):
         parsed_record_file = load_parsed_record_file_from_record_file(record_file)
         clear_all_record(parsed_record_file)
         do_record(record_file, parsed_record_file)
+    elif mode == "clear_all_unmark":
+        parsed_record_file = load_parsed_record_file_from_record_file(record_file)
+        clear_all_record_unmark(parsed_record_file)
+        do_record(record_file, parsed_record_file)   
 
 def main():
 
@@ -152,8 +187,9 @@ if __name__ == "__main__":
     main()
 
 
-# normal : load(from record) & search & delete & record 
+# normal : load(from record) & search & delete & record
 # record : load(from record) & search & record(mark)
 # clean : delete (in record) & record
 # check : update (in record) & record
 # clear_all : clear record
+# clear_all_unmark : clear record cleaned & not exist

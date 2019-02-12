@@ -3,7 +3,7 @@
     "OS_type" : "win",
     "set_direction" : "/Users/xern/project/DiskCleaner/test",
     "search_type" : "create_time",
-    "set_time" : 2592000,
+    "set_time" : 0,
     "record_file" : "record.json",
     "log_file" : "recent.log",
     "whitelist_direction" : {
