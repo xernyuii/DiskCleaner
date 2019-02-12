@@ -11,7 +11,8 @@ $ python3 CleanToolAdmin.py --help
 ```
 
 Use CleanToolAdmin.py to control the action, option "--mode" and "--config" are required.
-conf.json is for setting options and configuration.
++ conf.json is for setting options and configuration.
++ record.json is a staging area to record the files scanned.
 
 ```bash
 Usage: 
@@ -66,4 +67,3 @@ $ python3 CleanToolAdmin.py --mode=record --config=conf.json --debug # record
 $ # check record.json
 $ python3 CleanToolAdmin.py --mode=clean --config=conf.json --debug
 ```
-
