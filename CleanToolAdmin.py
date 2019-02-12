@@ -4,10 +4,10 @@ import os
 import json
 import time
 
-# Usage: CleanToolAdmin.py --mode=protect/force/record/clean --config=conf.json --debug --help
+# Usage: CleanToolAdmin.py --mode=normal/record/clean/clear_all/clear_all_unmark --config=conf.json --debug --help
 
 def help():
-    print("Usage: CleanToolAdmin.py --mode=protect/force/record/clean --config=conf.json --debug --help")
+    print("Usage: CleanToolAdmin.py --mode=normal/record/clean/clear_all/clear_all_unmark --config=conf.json --debug --help")
 
 def args_check(config_file, mode, parsed_config):
     #print(parsed_config)
@@ -27,7 +27,8 @@ def args_parse():
         print("~",opts)
         print("~",args)
     except getopt.GetoptError:
-        print("ERROR: Usage: CleanToolAdmin.py --mode=protect/force/record/clean --config=conf.json --debug --help")
+        print("ERROR: Usage error")
+        help()
         sys.exit(2)
 
     for opt, arg in opts:
