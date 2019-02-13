@@ -49,19 +49,24 @@ def args_parse():
             print("#debug", debug)
     return debug, config_file, mode, parsed_config
 
-def rcs_search(parsed_config, parsed_record_file):
-    search_type = parsed_config["search_type"]
-    set_time = parsed_config["set_time"]
-    set_direction = parsed_config["set_direction"]
-    #parsed_record_file = {}
-    now = time.time()
-    local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    only = set()
-    for rule_name in parsed_config["custom_rules"]["is_enable"]:
-        for rule in parsed_config["custom_rules"][rule_name]["rules"]:
-            only.add(rule)
-    print(only)
-    for path, dirs, files in os.walk(set_direction):
+def set_unit(fsize):
+    if fsize < 1024:
+        fsize = fsize
+        unit = "B"
+    elif fsize < (1024 * 1024):
+        fsize = fsize / (1024)
+        unit = "KB"
+    elif fsize < (1024 * 1024 * 1024):
+        fsize = fsize / (1024 * 1024)
+        unit = "MB"
+    else:
+        fsize = fsize / (1024 * 1024 * 1024)
+        unit = "GB"
+
+    return unit
+
+def dfs(target_direction, search_type, set_time, now, local_time, only, parsed_record_file):
+    for path, dirs, files in os.walk(target_direction):
         for name in files:
             if os.path.splitext(name)[-1][1:] not in only:
                 continue
@@ -76,22 +81,10 @@ def rcs_search(parsed_config, parsed_record_file):
                 elif search_type == "access_time":
                     ftime = os.path.getmtime(fullpath)
                 
-                
                 if (now - ftime) >= set_time:
                     fsize = os.path.getsize(fullpath)
                     
-                    if fsize < 1024:
-                        fsize = fsize
-                        unit = "B"
-                    elif fsize < (1024 * 1024):
-                        fsize = fsize / (1024)
-                        unit = "KB"
-                    elif fsize < (1024 * 1024 * 1024):
-                        fsize = fsize / (1024 * 1024)
-                        unit = "MB"
-                    else:
-                        fsize = fsize / (1024 * 1024 * 1024)
-                        unit = "GB"
+                    unit = set_unit(fsize)
 
                     ftime_local = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ftime))
                     if fullpath in parsed_record_file["files_on_mark"].keys():
@@ -99,7 +92,21 @@ def rcs_search(parsed_config, parsed_record_file):
                     else:
                         flag = "mark"
                     parsed_record_file["files_on_mark"][fullpath] = {"state" : flag, "search_type" : search_type, "ftime" : ftime, "ftime_local" : ftime_local, "time_set" : set_time, "size" : str(fsize) + " " + unit, "search_date" : local_time}
-    
+
+def rcs_search(parsed_config, parsed_record_file):
+    search_type = parsed_config["search_type"]
+    set_time = parsed_config["set_time"]
+    set_direction = parsed_config["set_direction"]
+    #parsed_record_file = {}
+    now = time.time()
+    local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    only = set()
+    for rule_name in parsed_config["custom_rules"]["is_enable"]:
+        for rule in parsed_config["custom_rules"][rule_name]["rules"]:
+            only.add(rule)
+    #print(only)
+    for target_direction in set_direction:
+        dfs(target_direction, search_type, set_time, now, local_time, only, parsed_record_file)
 
 def do_record(record_file, parsed_record_file):
     with open(record_file,"w") as dump_f:
@@ -185,15 +192,12 @@ def main():
     # Parse args and check
     debug, config_file, mode ,parsed_config = args_parse()
     args_check(config_file, mode, parsed_config)
-
-    # Serach the direction recursively
     
     # Do actions
     mode_action(mode, parsed_config)
 
 if __name__ == "__main__":
     main()
-
 
 # normal : load(from record) & search & delete & record
 # record : load(from record) & search & record(mark)

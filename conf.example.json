@@ -1,7 +1,10 @@
 {
     "check_num" : 0,
     "OS_type" : "win",
-    "set_direction" : "/Users/xern/project/DiskCleaner/test",
+    "set_direction" : [
+        "/Users/xern/project/DiskCleaner/test",
+        "/Users/xern/project/shuke"
+    ],
     "search_type" : "create_time",
     "set_time" : 0,
     "record_file" : "record.json",
@@ -24,7 +27,8 @@
                 "vhds",
                 "avhd",
                 "avhdx",
-                "txt"
+                "txt",
+                "sh"
             ]
         }
     }

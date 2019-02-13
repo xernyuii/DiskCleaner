@@ -1,4 +1,95 @@
 {
-    "last_modified_date":"2019-02-12 16:52:05",
-    "files_on_mark":{}
+    "last_modified_date":"2019-02-13 23:25:08",
+    "files_on_mark":{
+        "/Users/xern/project/DiskCleaner/test/a.txt":{
+            "state":"mark again",
+            "search_type":"create_time",
+            "ftime":1550037225.7761357,
+            "ftime_local":"2019-02-13 13:53:45",
+            "time_set":0,
+            "size":"0 B",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/DiskCleaner/test/e/e.vhd":{
+            "state":"mark again",
+            "search_type":"create_time",
+            "ftime":1550037259.81987,
+            "ftime_local":"2019-02-13 13:54:19",
+            "time_set":0,
+            "size":"0 B",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/DiskCleaner/test/f/ppp.vhd":{
+            "state":"mark again",
+            "search_type":"create_time",
+            "ftime":1550037408.2023232,
+            "ftime_local":"2019-02-13 13:56:48",
+            "time_set":0,
+            "size":"3145728 MB",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/DiskCleaner/test/f/b.txt":{
+            "state":"mark again",
+            "search_type":"create_time",
+            "ftime":1550037380.4336903,
+            "ftime_local":"2019-02-13 13:56:20",
+            "time_set":0,
+            "size":"0 B",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/DiskCleaner/test/f/ppp.txt":{
+            "state":"mark again",
+            "search_type":"create_time",
+            "ftime":1550037396.2139108,
+            "ftime_local":"2019-02-13 13:56:36",
+            "time_set":0,
+            "size":"10485760 MB",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/DiskCleaner/test/h/go.txt":{
+            "state":"mark again",
+            "search_type":"create_time",
+            "ftime":1550037425.6539922,
+            "ftime_local":"2019-02-13 13:57:05",
+            "time_set":0,
+            "size":"10485760 MB",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/shuke/CMakeLists.txt":{
+            "state":"mark",
+            "search_type":"create_time",
+            "ftime":1547038011.6616447,
+            "ftime_local":"2019-01-09 20:46:51",
+            "time_set":0,
+            "size":"370 B",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/shuke/bootstrap.sh":{
+            "state":"mark",
+            "search_type":"create_time",
+            "ftime":1547038011.6625223,
+            "ftime_local":"2019-01-09 20:46:51",
+            "time_set":0,
+            "size":"545 B",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/shuke/vagrant/setup.sh":{
+            "state":"mark",
+            "search_type":"create_time",
+            "ftime":1547038011.6932404,
+            "ftime_local":"2019-01-09 20:46:51",
+            "time_set":0,
+            "size":"7056 KB",
+            "search_date":"2019-02-13 23:25:08"
+        },
+        "/Users/xern/project/shuke/tests/requirements.txt":{
+            "state":"mark",
+            "search_type":"create_time",
+            "ftime":1547038011.689272,
+            "ftime_local":"2019-01-09 20:46:51",
+            "time_set":0,
+            "size":"72 B",
+            "search_date":"2019-02-13 23:25:08"
+        }
+    }
 }
