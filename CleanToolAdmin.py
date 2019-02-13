@@ -56,10 +56,17 @@ def rcs_search(parsed_config, parsed_record_file):
     #parsed_record_file = {}
     now = time.time()
     local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    
+    only = set()
+    for rule_name in parsed_config["custom_rules"]["is_enable"]:
+        for rule in parsed_config["custom_rules"][rule_name]["rules"]:
+            only.add(rule)
+    print(only)
     for path, dirs, files in os.walk(set_direction):
         for name in files:
+            if os.path.splitext(name)[-1][1:] not in only:
+                continue
             fullpath = os.path.join(path, name)
+            print(fullpath)
             if os.path.exists(fullpath):
 
                 if search_type == "create_time":

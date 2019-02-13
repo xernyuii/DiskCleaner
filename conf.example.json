@@ -6,40 +6,26 @@
     "set_time" : 0,
     "record_file" : "record.json",
     "log_file" : "recent.log",
-    "whitelist_direction" : {
-        "//" : "do",
-        "is_enable" : true,
-        "dir" : [
-            "C:\\windows",
-            "C:\\windows"
-        ]
-    },
-    "blacklist_direction" : {
-        "is_enable" : true,
-        "dir" : [
-            "C:\\windows",
-            "C:\\windows"
-        ]
-    },
-    "whitelist_type" : {
-        "is_enable" : true,
-        "type" : [
-            "C:\\windows",
-            "C:\\windows"
-        ]
-    },
-    "blacklist_type" : {
-        "is_enable" : true,
-        "type" : [
-            "C:\\windows",
-            "C:\\windows"
-        ]
-    },
-    "regix_list" : {
-        "is_enable" : true,
-        "list" : [
-            "C:\\windows",
-            "C:\\windows"
-        ]
+    "custom_rules" : {
+        "is_enable" : [
+            "match_type"
+        ],
+        "whitelist_direction" : {
+            "action" : "only",
+            "rules" : [
+                "C:\\Users"
+            ]
+        },
+        "match_type" : {
+            "action" : "only",
+            "rules" : [
+                "vhd",
+                "vhdx",
+                "vhds",
+                "avhd",
+                "avhdx",
+                "txt"
+            ]
+        }
     }
 }

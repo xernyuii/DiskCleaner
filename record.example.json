@@ -1,47 +1,59 @@
 {
-    "last_modified_date":"2019-02-11 21:37:10",
+    "last_modified_date":"2019-02-13 13:57:15",
     "files_on_mark":{
-        "/Users/xern/project/DiskCleaner/test/a":{
-            "state":"mark",
+        "/Users/xern/project/DiskCleaner/test/a.txt":{
+            "state":"mark again",
             "search_type":"create_time",
-            "time_res":"1000",
-            "size":"100",
-            "search_date":"2019-1-1"
+            "ftime":1550037225.7761357,
+            "ftime_local":"2019-02-13 13:53:45",
+            "time_set":0,
+            "size":"0 B",
+            "search_date":"2019-02-13 13:57:15"
         },
-        "/Users/xern/project/DiskCleaner/test/c":{
-            "state":"mark",
+        "/Users/xern/project/DiskCleaner/test/e/e.vhd":{
+            "state":"mark again",
             "search_type":"create_time",
-            "time_res":"1000",
-            "size":"100",
-            "search_date":"2019-1-1"
+            "ftime":1550037259.81987,
+            "ftime_local":"2019-02-13 13:54:19",
+            "time_set":0,
+            "size":"0 B",
+            "search_date":"2019-02-13 13:57:15"
         },
-        "/Users/xern/project/DiskCleaner/test/d":{
+        "/Users/xern/project/DiskCleaner/test/f/ppp.vhd":{
             "state":"mark",
             "search_type":"create_time",
-            "time_res":"1000",
-            "size":"100",
-            "search_date":"2019-1-1"
+            "ftime":1550037408.2023232,
+            "ftime_local":"2019-02-13 13:56:48",
+            "time_set":0,
+            "size":"3.0 MB",
+            "search_date":"2019-02-13 13:57:15"
         },
-        "/Users/xern/project/DiskCleaner/test/b":{
+        "/Users/xern/project/DiskCleaner/test/f/b.txt":{
             "state":"mark",
             "search_type":"create_time",
-            "time_res":"1000",
-            "size":"100",
-            "search_date":"2019-1-1"
+            "ftime":1550037380.4336903,
+            "ftime_local":"2019-02-13 13:56:20",
+            "time_set":0,
+            "size":"0 B",
+            "search_date":"2019-02-13 13:57:15"
         },
-        "/Users/xern/project/DiskCleaner/test/e/a":{
+        "/Users/xern/project/DiskCleaner/test/f/ppp.txt":{
             "state":"mark",
             "search_type":"create_time",
-            "time_res":"1000",
-            "size":"100",
-            "search_date":"2019-1-1"
+            "ftime":1550037396.2139108,
+            "ftime_local":"2019-02-13 13:56:36",
+            "time_set":0,
+            "size":"10.0 MB",
+            "search_date":"2019-02-13 13:57:15"
         },
-        "/Users/xern/project/DiskCleaner/test/e/b":{
+        "/Users/xern/project/DiskCleaner/test/h/go.txt":{
             "state":"mark",
             "search_type":"create_time",
-            "time_res":"1000",
-            "size":"100",
-            "search_date":"2019-1-1"
+            "ftime":1550037425.6539922,
+            "ftime_local":"2019-02-13 13:57:05",
+            "time_set":0,
+            "size":"10.0 MB",
+            "search_date":"2019-02-13 13:57:15"
         }
     }
 }
