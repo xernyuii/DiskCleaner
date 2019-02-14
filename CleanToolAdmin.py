@@ -3,6 +3,8 @@ import getopt
 import os
 import json
 import time
+import logging
+import logging.config
 
 # Usage: CleanToolAdmin.py --mode=normal/record/clean/clear_all/clear_all_unmark --config=conf.json --debug --help
 
@@ -18,19 +20,16 @@ def args_check(config_file, mode, parsed_config):
         print("ERROR: Config file not correct! (parsed)")
         sys.exit(2)
     elif mode not in {"normal", "protect", "force", "record", "clean", "clear_all", "clear_all_unmark"}:
-        print("ERROR: Mode not correct.")
-        sys.exit(2)
+        print("Warning: Mode not set by arg.")
 
 def args_parse():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "m:c:dh",["mode=", "config=", "debug", "help"])
-        print("~",opts)
-        print("~",args)
     except getopt.GetoptError:
         print("ERROR: Usage error")
         help()
         sys.exit(2)
-
+    mode = ""
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print("#help")
@@ -38,7 +37,7 @@ def args_parse():
             sys.exit()
         elif opt in ("-m", "--mode"):
             mode = arg
-            print("#mode")
+            print("#mode", mode)
         elif opt in ("-c", "--config"):
             config_file = arg
             with open(config_file, 'r') as jsonfile:
@@ -65,13 +64,15 @@ def set_unit(fsize):
 
     return unit
 
-def dfs(target_direction, search_type, set_time, now, local_time, only, parsed_record_file):
+def dfs(target_direction, search_type, set_time, now, local_time, only, parsed_record_file, parsed_config):
     for path, dirs, files in os.walk(target_direction):
+        #print(dirs)
         for name in files:
-            if os.path.splitext(name)[-1][1:] not in only:
-                continue
+            if parsed_config["custom_rules"]["is_enable"] != []:
+                if os.path.splitext(name)[-1][1:] not in only:
+                    continue
             fullpath = os.path.join(path, name)
-            print(fullpath)
+            logging.info("%r scan %r",local_time, fullpath)
             if os.path.exists(fullpath):
 
                 if search_type == "create_time":
@@ -92,6 +93,10 @@ def dfs(target_direction, search_type, set_time, now, local_time, only, parsed_r
                     else:
                         flag = "mark"
                     parsed_record_file["files_on_mark"][fullpath] = {"state" : flag, "search_type" : search_type, "ftime" : ftime, "ftime_local" : ftime_local, "time_set" : set_time, "size" : str(fsize) + " " + unit, "search_date" : local_time}
+        
+    # for root, dirs, files in os.walk(target_direction, topdown=False):
+    #     if not files and not dirs:
+    #         print("!"+root)
 
 def rcs_search(parsed_config, parsed_record_file):
     search_type = parsed_config["search_type"]
@@ -100,13 +105,14 @@ def rcs_search(parsed_config, parsed_record_file):
     #parsed_record_file = {}
     now = time.time()
     local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    logging.info("\n### Start %r search_type:%r set_time:%r set_direction%r", local_time, search_type, set_time, set_direction)
     only = set()
     for rule_name in parsed_config["custom_rules"]["is_enable"]:
         for rule in parsed_config["custom_rules"][rule_name]["rules"]:
             only.add(rule)
     #print(only)
     for target_direction in set_direction:
-        dfs(target_direction, search_type, set_time, now, local_time, only, parsed_record_file)
+        dfs(target_direction, search_type, set_time, now, local_time, only, parsed_record_file, parsed_config)
 
 def do_record(record_file, parsed_record_file):
     with open(record_file,"w") as dump_f:
@@ -114,17 +120,36 @@ def do_record(record_file, parsed_record_file):
 
 def do_delete_from_parsed_record_file(parsed_record_file):
     for fullpath in parsed_record_file["files_on_mark"]:
-        if os.path.exists(fullpath) == True :
+        if os.path.isfile(fullpath) == True :
             try:
                 os.remove(fullpath)
-                print("delete", fullpath)
+                logging.info("delete %r", fullpath)
             except OSError as err:
-                print("OSError: {0}".format(err))
+                logging.error("OSError: {0}".format(err))
+                parsed_record_file["files_on_mark"][fullpath]["state"] = "error during delete"
+            else:
+                parsed_record_file["files_on_mark"][fullpath]["state"] = "cleaned"
+        elif os.path.isdir(fullpath) == True :
+            try:
+                os.remove(fullpath)
+                logging.info("delete %r", fullpath)
+            except OSError as err:
+                logging.error("OSError: {0}".format(err))
                 parsed_record_file["files_on_mark"][fullpath]["state"] = "error during delete"
             else:
                 parsed_record_file["files_on_mark"][fullpath]["state"] = "cleaned"
         else:
             parsed_record_file["files_on_mark"][fullpath]["state"] = "not exist"
+
+def do_delete_empty_dir(parsed_config):
+    set_direction = parsed_config["set_direction"]
+    for target_direction in set_direction:
+        for root, dirs, files in os.walk(target_direction, topdown=False):
+            # print("#", root)
+            # print(os.listdir(root))
+            if not os.listdir(root):
+                os.rmdir(root)
+                logging.info("delete dir %r", root)
 
 def load_parsed_record_file_from_record_file(record_file):
     local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -160,12 +185,15 @@ def clear_all_record_unmark(parsed_record_file):
 def mode_action(mode, parsed_config):
 
     record_file = parsed_config["record_file"]
+    if mode == "":
+        mode = parsed_config["default_mode"]
+        logging.warning("Mode set by config %r", mode)
 
     if mode == "normal":
         parsed_record_file = load_parsed_record_file_from_record_file(record_file)
         rcs_search(parsed_config, parsed_record_file)
         do_delete_from_parsed_record_file(parsed_record_file)
-        do_record(record_file, parsed_record_file)
+        do_delete_empty_dir(parsed_config)
     elif mode == "record":
         parsed_record_file = load_parsed_record_file_from_record_file(record_file)
         rcs_search(parsed_config, parsed_record_file)
@@ -192,9 +220,13 @@ def main():
     # Parse args and check
     debug, config_file, mode ,parsed_config = args_parse()
     args_check(config_file, mode, parsed_config)
-    
+    if debug == True:
+        logging.basicConfig(filename = parsed_config["log_file"],level = logging.DEBUG)
+    else:
+        logging.basicConfig(filename = parsed_config["log_file"],level = logging.INFO)
     # Do actions
     mode_action(mode, parsed_config)
+    logging.info("\n### End")
 
 if __name__ == "__main__":
     main()

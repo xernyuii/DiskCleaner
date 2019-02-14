@@ -1,17 +1,17 @@
 {
     "check_num" : 0,
     "OS_type" : "win",
+    "default_mode" : "normal",
     "set_direction" : [
-        "/Users/xern/project/DiskCleaner/test",
-        "/Users/xern/project/shuke"
+        "/Users/xern/project/DiskCleaner/test"
     ],
     "search_type" : "create_time",
-    "set_time" : 0,
+    "set_time" : 2592000,
     "record_file" : "record.json",
     "log_file" : "recent.log",
     "custom_rules" : {
         "is_enable" : [
-            "match_type"
+
         ],
         "whitelist_direction" : {
             "action" : "only",
