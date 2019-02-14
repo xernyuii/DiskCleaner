@@ -24,12 +24,14 @@ def args_check(config_file, mode, parsed_config):
 
 def args_parse():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "m:c:dh",["mode=", "config=", "debug", "help"])
+        opts, args = getopt.getopt(sys.argv[1:], "m:c:s:dh",["mode=", "config=", "set_direction_arg", "debug", "help"])
     except getopt.GetoptError:
         print("ERROR: Usage error")
         help()
         sys.exit(2)
     mode = ""
+    set_direction_arg = ""
+    debug = False
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print("#help")
@@ -43,10 +45,12 @@ def args_parse():
             with open(config_file, 'r') as jsonfile:
                 parsed_config = json.load(jsonfile)
                 #print(parsed_config)
+        elif opt in ("-s", "--set_direction_arg"):
+            set_direction_arg = arg
         elif opt in ("-d", "--debug"):
             debug = True
             print("#debug", debug)
-    return debug, config_file, mode, parsed_config
+    return debug, config_file, mode, parsed_config, set_direction_arg
 
 def set_unit(fsize):
     if fsize < 1024:
@@ -98,10 +102,13 @@ def dfs(target_direction, search_type, set_time, now, local_time, only, parsed_r
     #     if not files and not dirs:
     #         print("!"+root)
 
-def rcs_search(parsed_config, parsed_record_file):
+def rcs_search(parsed_config, parsed_record_file, set_direction_arg):
     search_type = parsed_config["search_type"]
     set_time = parsed_config["set_time"]
-    set_direction = parsed_config["set_direction"]
+    if set_direction_arg == "":
+        set_direction = parsed_config["set_direction"]
+    else:
+        set_direction = [set_direction_arg]
     #parsed_record_file = {}
     now = time.time()
     local_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -144,6 +151,8 @@ def do_delete_from_parsed_record_file(parsed_record_file):
 def do_delete_empty_dir(parsed_config):
     set_direction = parsed_config["set_direction"]
     for target_direction in set_direction:
+        if os.path.exists(target_direction) == False:
+            logging.warning("No direction %r", target_direction)
         for root, dirs, files in os.walk(target_direction, topdown=False):
             # print("#", root)
             # print(os.listdir(root))
@@ -182,7 +191,7 @@ def clear_all_record_unmark(parsed_record_file):
     for fullpath in ready_clear_record:
         parsed_record_file["files_on_mark"].pop(fullpath)
 
-def mode_action(mode, parsed_config):
+def mode_action(mode, parsed_config, set_direction_arg):
 
     record_file = parsed_config["record_file"]
     if mode == "":
@@ -191,12 +200,12 @@ def mode_action(mode, parsed_config):
 
     if mode == "normal":
         parsed_record_file = load_parsed_record_file_from_record_file(record_file)
-        rcs_search(parsed_config, parsed_record_file)
+        rcs_search(parsed_config, parsed_record_file, set_direction_arg)
         do_delete_from_parsed_record_file(parsed_record_file)
         do_delete_empty_dir(parsed_config)
     elif mode == "record":
         parsed_record_file = load_parsed_record_file_from_record_file(record_file)
-        rcs_search(parsed_config, parsed_record_file)
+        rcs_search(parsed_config, parsed_record_file, set_direction_arg)
         do_record(record_file, parsed_record_file)
     elif mode == "clean":
         parsed_record_file = load_parsed_record_file_from_record_file(record_file)
@@ -223,7 +232,7 @@ def check_log_file(parsed_config):
 def main():
 
     # Parse args and check
-    debug, config_file, mode ,parsed_config = args_parse()
+    debug, config_file, mode ,parsed_config ,set_direction_arg = args_parse()
     args_check(config_file, mode, parsed_config)
     check_log_file(parsed_config)
     if debug == True:
@@ -231,7 +240,7 @@ def main():
     else:
         logging.basicConfig(filename = parsed_config["log_file"],level = logging.INFO)
     # Do actions
-    mode_action(mode, parsed_config)
+    mode_action(mode, parsed_config, set_direction_arg)
     logging.info("\n### End")
 
 if __name__ == "__main__":

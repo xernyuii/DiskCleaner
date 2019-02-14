@@ -3,7 +3,8 @@
     "OS_type" : "win",
     "default_mode" : "normal",
     "set_direction" : [
-        "/Users/xern/project/DiskCleaner/test"
+        "/sharedisk/results",
+        "C:\\Users\\ciadmin\\test"
     ],
     "search_type" : "create_time",
     "set_time" : 2592000,
