@@ -9,6 +9,7 @@
     "set_time" : 2592000,
     "record_file" : "record.json",
     "log_file" : "recent.log",
+    "del_old_log_file" : "always",
     "custom_rules" : {
         "is_enable" : [
 

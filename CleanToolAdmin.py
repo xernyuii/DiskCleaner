@@ -215,11 +215,17 @@ def mode_action(mode, parsed_config):
         clear_all_record_unmark(parsed_record_file)
         do_record(record_file, parsed_record_file)   
 
+def check_log_file(parsed_config):
+    if parsed_config["del_old_log_file"] == "always":
+        if os.path.exists(parsed_config["log_file"]):
+            os.remove(parsed_config["log_file"])
+
 def main():
 
     # Parse args and check
     debug, config_file, mode ,parsed_config = args_parse()
     args_check(config_file, mode, parsed_config)
+    check_log_file(parsed_config)
     if debug == True:
         logging.basicConfig(filename = parsed_config["log_file"],level = logging.DEBUG)
     else:
